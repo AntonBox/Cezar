@@ -7,7 +7,11 @@
 		<div class="container">
 		<blockquote>
 	        <p>
-	           <em>Define style this season with Armani's new range of trendy tops, crafted with intricate details. Create a chic statement look by teaming this lace number with skinny jeans and pumps.</em>
+	           <em>Шифр Цезаря один из наиболее древнейших известных шифров. 	  Схема шифрования очень проста -
+					используется сдвиг буквы алфавита на фиксированное число позиций. Используемое преобразование обычно
+					обозначают как ROTN, где N - сдвиг, ROT - сокращение от слова ROTATE, в данном случае “циклический
+					сдвиг”. Введите N(число от 0 до 26) в поле для ввода и зашифруйте или расшифруйте ваш текст. Так же вам будет выведена частотная диаграмма символов, встречающихся в вашем тексте.
+				</em>
 	        </p>
         </blockquote>
 			<div class="row">
@@ -15,22 +19,22 @@
 				<div class='col-md-5'>
 					<div class="form-group">
 					  <label for="comment">Write:</label>
-					  <textarea class="form-control" rows="20" id="write"></textarea>
+					  <textarea class="form-control" rows="10" id="write"></textarea>
 					</div>
 				</div>
 
 				<div class="col-md-2">
 					<div class="row" style="margin-top: 150px">
-						<button type="button" onclick="codeText()" class="btn btn-success">Code</button>
+						<button type="button" onclick="codeText(), graph()" class="btn btn-success">Code</button>
 						<input type="text" id="rotate" style="width: 30px;">
-						<button type="button" onclick="uncodeText()" class="btn btn-danger">Uncode</button>
+						<button type="button" onclick="uncodeText(), graph()" class="btn btn-danger">Uncode</button>
 					</div>
 				</div>
 
 				<div class='col-md-5'>
 					<div class="form-group">
 					  <label for="comment">Read:</label>
-					  <textarea readonly class="form-control" rows="20" id="read">
+					  <textarea readonly class="form-control" rows="10" id="read">
 					  </textarea>
 					</div>
 				</div>
@@ -40,12 +44,19 @@
 	</div>
 
 
+<div id="chartContainer" style="height: 300px; width: 100%;"></div>
+
+
+
+
+
+
+
+
 {% endblock %}
-
-
-
 
 
 {% block extra_script %}
     <script type="text/javascript"src="{% static "js/cezar.js" %}"></script>
+    <script type="text/javascript" src="{% static "js/jquery.canvasjs.min.js" %}"></script>
 {% endblock %}
