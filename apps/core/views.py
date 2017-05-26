@@ -50,3 +50,20 @@ def uncode(request):
         uncoded_text.append(letter)
     read = ''.join(uncoded_text)
     return JsonResponse(read, safe=False)
+
+
+def scan(request):
+    alpha = list('abcdefghijklmnopqrstuvwxyz')
+    data = json.loads(request.body.decode("utf-8"))
+    text = data['code'].lower()
+    text = text.split(' ')
+    N = 0
+    for word in text:
+        for letter in alpha:
+            if word == letter:
+                N = alpha.index(letter)
+    if N == 0:
+        read = 'Совпадений не найдено'
+    else:
+        read = 'Система обнаружила шифр с N =%d' % (N)
+    return JsonResponse(read, safe=False)

@@ -13,6 +13,17 @@ function uncodeText(){
 	$.post('/uncode/', dataToSend, pasteCodedText, "json").error(function() { alert("Введите корректное число 0-26"); });
 }
 
+function scan(){
+	write = document.getElementById('write').value;
+	dataToSend = JSON.stringify({code: write});
+	$.post('/scan/', dataToSend, scanResult, "json");
+}
+
+function scanResult(data){
+	alert(data);
+}
+
+
 function pasteCodedText(data){
 	document.getElementById("read").innerHTML = data;
 }
