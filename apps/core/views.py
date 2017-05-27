@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.http import JsonResponse, HttpResponse
 import json
+from apps.core.forms import check_NForm
 
 
 def cezar(request):
@@ -10,49 +11,55 @@ def cezar(request):
 def code(request):
     alpha = list('abcdefghijklmnopqrstuvwxyz')
     data = json.loads(request.body.decode("utf-8"))
-    text = data['code'].lower()
-    try:
-        N = int(data['rotate'])
-    except ValueError:
+    check_N_form = check_NForm(data)
+    if check_N_form.is_valid():
+        N = check_N_form.cleaned_data['rotate']
+        text = check_N_form.cleaned_data['code']
+        coded_text = []
+        for letter in text:
+            if letter in alpha:
+                number = alpha.index(letter) + N
+                if number > len(alpha) - 1:
+                    number = len(alpha) - alpha.index(letter)
+                    number = N - number
+                letter = alpha[number]
+            coded_text.append(letter)
+        read = ''.join(coded_text)
+        return JsonResponse(read, safe=False)
+    else:
         return HttpResponse(status=400)
-    if N not in range(0, len(alpha) + 1):
-        return HttpResponse(status=400)
-    coded_text = []
-    for letter in text:
-        if letter in alpha:
-            number = alpha.index(letter) + N
-            if number > len(alpha) - 1:
-                number = len(alpha) - alpha.index(letter)
-                number = N - number
-            letter = alpha[number]
-        coded_text.append(letter)
-    read = ''.join(coded_text)
-    return JsonResponse(read, safe=False)
 
 
 def uncode(request):
     alpha = list('abcdefghijklmnopqrstuvwxyz')
     data = json.loads(request.body.decode("utf-8"))
-    text = data['code'].lower()
-    try:
-        N = int(data['rotate'])
-    except ValueError:
+    check_N_form = check_NForm(data)
+    if check_N_form.is_valid():
+        N = check_N_form.cleaned_data['rotate']
+        text = check_N_form.cleaned_data['code']
+        uncoded_text = []
+        for letter in text:
+            if letter in alpha:
+                number = alpha.index(letter) - N
+                if number < 0:
+                    number = len(alpha) - N + alpha.index(letter)
+                letter = alpha[number]
+            uncoded_text.append(letter)
+        read = ''.join(uncoded_text)
+        return JsonResponse(read, safe=False)
+    else:
         return HttpResponse(status=400)
-    if N not in range(0, len(alpha) + 1):
-        return HttpResponse(status=400)
-    uncoded_text = []
-    for letter in text:
-        if letter in alpha:
-            number = alpha.index(letter) - N
-            if number < 0:
-                number = len(alpha) - N + alpha.index(letter)
-            letter = alpha[number]
-        uncoded_text.append(letter)
-    read = ''.join(uncoded_text)
-    return JsonResponse(read, safe=False)
 
 
 def scan(request):
+    '''Суть заключается в том, что в английском почти в каждом предложении
+    используется союз 'a': 'this is a pensil, this is a pen'.
+    это очень часто используемое слово из одной буквы
+    соответственно в зашифрованном тексте N=2  слово "а" будет словом 'c'
+    вот если в тексте встречается слово из одной буквы, то скорее всего
+    это буква "а" смещенная на N позиций, а значит шифр этого текста равен 'N'
+    на живых текстах работает в большинстве случаев работает.
+     '''
     alpha = list('abcdefghijklmnopqrstuvwxyz')
     data = json.loads(request.body.decode("utf-8"))
     text = data['code'].lower()
