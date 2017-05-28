@@ -1,7 +1,7 @@
 from django import forms
 
 
-class check_NForm(forms.Form):
+class CheckDataForm(forms.Form):
     rotate = forms.IntegerField()
     code = forms.CharField()
 

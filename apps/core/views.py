@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.http import JsonResponse, HttpResponse
 import json
-from apps.core.forms import check_NForm
+from apps.core.forms import CheckDataForm
 
 
 def cezar(request):
@@ -11,10 +11,10 @@ def cezar(request):
 def code(request):
     alpha = list('abcdefghijklmnopqrstuvwxyz')
     data = json.loads(request.body.decode("utf-8"))
-    check_N_form = check_NForm(data)
-    if check_N_form.is_valid():
-        N = check_N_form.cleaned_data['rotate']
-        text = check_N_form.cleaned_data['code']
+    form = CheckDataForm(data)
+    if form.is_valid():
+        N = form.cleaned_data['rotate']
+        text = form.cleaned_data['code']
         coded_text = []
         for letter in text:
             if letter in alpha:
@@ -33,10 +33,10 @@ def code(request):
 def uncode(request):
     alpha = list('abcdefghijklmnopqrstuvwxyz')
     data = json.loads(request.body.decode("utf-8"))
-    check_N_form = check_NForm(data)
-    if check_N_form.is_valid():
-        N = check_N_form.cleaned_data['rotate']
-        text = check_N_form.cleaned_data['code']
+    form = CheckDataForm(data)
+    if form.is_valid():
+        N = form.cleaned_data['rotate']
+        text = form.cleaned_data['code']
         uncoded_text = []
         for letter in text:
             if letter in alpha:

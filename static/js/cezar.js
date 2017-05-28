@@ -31,8 +31,8 @@ function pasteCodedText(data){
 function graph(){
 	// count each letter and convert in to arrays of objects
 	write = document.getElementById('write').value;
-	writeArray = write.split('');	
-	var graphData = writeArray.reduce(function(acc, el) {
+	write = write.split('');	
+	var graphData = write.reduce(function(acc, el) {
   		acc[el] = (acc[el] || 0) + 1;
   		return acc;
 	}, {});
