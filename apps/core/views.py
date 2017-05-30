@@ -69,6 +69,7 @@ def scan(request):
         for letter in alpha:
             if word == letter:
                 N = alpha.index(letter)
+                break
     if N == 0:
         read = 'Совпадений не найдено'
     else:
